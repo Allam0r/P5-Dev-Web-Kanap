@@ -2,7 +2,7 @@
 
 // Récupération des info de l'API
 fetch("http://localhost:3000/api/products")
-  // Une fois les infos obtenus donnent le résultat en Json
+  // Une fois les infos obtenues donne le résultat en Json
   .then((response) => response.json())
   //   Donne moi les infos sur la console sous forme de tableau
   .then((data) => {
@@ -15,7 +15,7 @@ fetch("http://localhost:3000/api/products")
 
 // Fonction d'affichage des items de l'API sur la page Index
 function listKanap(index) {
-  // On déclare la zone 'articleCard' dans l'HTML
+  // On déclare l'emplacement de 'articleCard' dans l'HTML
   let articleCards = document.querySelector("#items");
   // Création de la boucle article dans Index
   for (let article of index) {
