@@ -16,7 +16,7 @@ function listKanap(index) {
 
     let linkProduct = document.createElement("a");
     document.querySelector("#items").appendChild(linkProduct);
-    linkProduct.href = `./product.html?_id${article._id}`;
+    linkProduct.href = `./product.html?_id=${article._id}`;
 
     let articleCard = document.createElement("article");
     linkProduct.appendChild(articleCard);
