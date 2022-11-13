@@ -10,12 +10,12 @@ fetch("http://localhost:3000/api/products")
     console.log(error.message);
   });
 
-function listKanap(index) {
-  index.forEach((article) => {
+function listKanap(listProducts) {
+  listProducts.forEach((article) => {
     console.log(article);
 
+    //creation du lien
     let linkProduct = document.createElement("a");
-    document.querySelector("#items").appendChild(linkProduct);
     linkProduct.href = `./product.html?_id=${article._id}`;
 
     let articleCard = document.createElement("article");
@@ -23,18 +23,20 @@ function listKanap(index) {
 
     let articleImage = document.createElement("img");
     articleCard.appendChild(articleImage);
-    articleImage.src = `${article.imageUrl}`;
-    articleImage.alt = `${article.altTxt}`;
+    articleImage.setAttribute("src", `${article.imageUrl}`);
+    articleImage.setAttribute("alt", `${article.altTxt}`);
 
     let productName = document.createElement("h3");
     articleCard.appendChild(productName);
     productName.classList.add("productName");
-    productName.innerHTML = `${article.name}`;
+    productName.textContent = `${article.name}`;
 
     let productDesc = document.createElement("p");
     articleCard.appendChild(productDesc);
     productDesc.classList.add("productDescription");
     productDesc.innerHTML = `${article.description}`;
+
+    document.querySelector("#items").appendChild(linkProduct);
   });
 }
 
