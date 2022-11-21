@@ -3,12 +3,15 @@ let params = new URL(document.location).searchParams;
 let productId = params.get("_id");
 console.log(productId);
 
+// Affichage du produit via l'ID
 fetch("http://localhost:3000/api/products/" + productId)
   .then((res) => res.json())
   .then((product) => {
     console.log(product);
     productItem(product);
   })
+
+  //  Alerte si l'API n'est pas joignable
   .catch((error) => {
     alert("Veuillez contacter l'administrateur du site");
     console.log(error.message);
@@ -40,7 +43,7 @@ function productItem(product) {
     document.querySelector("#colors").appendChild(articleColor);
   }
 
-  //Ajouter le controle de la selection d'une couleur
+  // Ajouter le contrôle de la selection d'une couleur
   document
     .getElementById("colors")
     .addEventListener("change", function (event) {
@@ -50,7 +53,7 @@ function productItem(product) {
       validColor(this.value);
     });
 
-  //Ajouter le controle de sais d'une bonne quantité ( etre 1 et 100)
+  // Ajouter le controle de saisie d'une quantité valide ( etre 1 et 100)
   document
     .getElementById("quantity")
     .addEventListener("change", function (event) {
@@ -61,7 +64,7 @@ function productItem(product) {
       validQty(qty);
     });
 
-  //Ajouter le listener et le controle sur le bouton ajouter au panier
+  // Ajouter le listener et le controle sur le bouton ajouter au panier
   document
     .getElementById("addToCart")
     .addEventListener("click", function (event) {
@@ -73,17 +76,49 @@ function productItem(product) {
 
       let isValidColor = validColor(document.getElementById("colors").value);
 
-      // si les deux champs sont valid
+      // Si les deux champs sont valid
       if (isValidColor && isValidQty) {
-        //=> ajouter sur le localStorage
+        // Ajout sur le localStorage
+        function saveLocalStorage(orderOption) {
+          let productSaveInLocal = JSON.parse(localStorage.getItem("Kanap"));
+
+          if (productSaveInLocal === null) {
+            productSaveInLocal = [];
+            productSaveInLocal.push(orderOption);
+            localStorage.setItem("Kanap", JSON.stringify(productSaveInLocal));
+          } else {
+            const productFound = productSaveInLocal.find(
+              (elem) =>
+                elem.id == orderOption.id && elem.color == orderOption.color
+            );
+
+            if (productFound == undefined) {
+              productSaveInLocal.push(orderOption);
+              localStorage.setItem("Kanap", JSON.stringify(productSaveInLocal));
+
+              //  Si produit avec même ID/color modification de la quantité
+            } else {
+              productFound.quantity = orderOption.quantity;
+              localStorage.setItem("Kanap", JSON.stringify(productSaveInLocal));
+            }
+          }
+        }
+
+        //  Données enregistrées dans le localStorage
+        let orderOption = {
+          id: productId,
+          color: document.getElementById("colors").value,
+          quantity: parseInt(document.getElementById("quantity").value),
+        };
+        saveLocalStorage(orderOption);
       }
-      //Sinon rien à faire afficher une alerte avec le probleme (Déjà faite dans les deux fonction valid)
+      // Sinon rien à faire, afficher une alerte avec le probleme (Déjà faite dans les deux fonction valid)
     });
 }
 
-// controler la quantité entre 1 et 100
+// Contrôler la quantité entre 1 et 100
 function validQty(quantity) {
-  if (quantity > 1 && quantity <= 100) {
+  if (quantity > 0 && quantity <= 100) {
     return true;
   } else {
     alert("La quantité selectionner n'est pas valide !");
@@ -91,7 +126,7 @@ function validQty(quantity) {
   }
 }
 
-// controler la selection d'une couleur
+// Contrôler la selection d'une couleur
 function validColor(color) {
   if (color !== "") {
     return true;
