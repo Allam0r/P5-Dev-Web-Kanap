@@ -117,7 +117,7 @@ function productItem(product) {
                 JSON.stringify(productSaveInLocal)
               );
               alert(
-                "Vous avez ajoutez " +
+                "Vous avez ajouter " +
                   orderOption.quantity +
                   " " +
                   orderOption.name +

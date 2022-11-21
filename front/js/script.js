@@ -16,8 +16,6 @@ fetch("http://localhost:3000/api/products")
 
 function listKanap(listProducts) {
   listProducts.forEach((article) => {
-    console.log(article);
-
     // Creation du lien + éléments
     let linkProduct = document.createElement("a");
     linkProduct.href = `./product.html?_id=${article._id}`;
