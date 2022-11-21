@@ -86,6 +86,12 @@ function productItem(product) {
             productSaveInLocal = [];
             productSaveInLocal.push(orderOption);
             localStorage.setItem("Kanap", JSON.stringify(productSaveInLocal));
+            alert(
+              orderOption.quantity +
+                " " +
+                orderOption.name +
+                " ajouter au panier !"
+            );
           } else {
             const productFound = productSaveInLocal.find(
               (elem) =>
@@ -98,15 +104,23 @@ function productItem(product) {
 
               //  Si produit avec même ID/color modification de la quantité
             } else {
-              productFound.quantity = orderOption.quantity;
+              productFound.quantity += orderOption.quantity;
               localStorage.setItem("Kanap", JSON.stringify(productSaveInLocal));
+              alert(
+                "Vous avez ajoutez " +
+                  orderOption.quantity +
+                  " " +
+                  orderOption.name +
+                  " au panier !"
+              );
             }
           }
         }
 
         //  Données enregistrées dans le localStorage
         let orderOption = {
-          id: productId,
+          id: `${product._id}`,
+          name: `${product.name}`,
           color: document.getElementById("colors").value,
           quantity: parseInt(document.getElementById("quantity").value),
         };
