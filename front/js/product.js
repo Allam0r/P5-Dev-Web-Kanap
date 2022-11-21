@@ -35,7 +35,6 @@ function productItem(product) {
   articleDesc.textContent = product.description;
 
   for (let color of product.colors) {
-    console.log(color);
     let articleColor = document.createElement("option");
     articleColor.value = color;
     articleColor.text = color;
@@ -80,12 +79,17 @@ function productItem(product) {
       if (isValidColor && isValidQty) {
         // Ajout sur le localStorage
         function saveLocalStorage(orderOption) {
-          let productSaveInLocal = JSON.parse(localStorage.getItem("Kanap"));
+          let productSaveInLocal = JSON.parse(
+            localStorage.getItem("KanapCart")
+          );
 
           if (productSaveInLocal === null) {
             productSaveInLocal = [];
             productSaveInLocal.push(orderOption);
-            localStorage.setItem("Kanap", JSON.stringify(productSaveInLocal));
+            localStorage.setItem(
+              "KanapCart",
+              JSON.stringify(productSaveInLocal)
+            );
             alert(
               orderOption.quantity +
                 " " +
@@ -100,12 +104,18 @@ function productItem(product) {
 
             if (productFound == undefined) {
               productSaveInLocal.push(orderOption);
-              localStorage.setItem("Kanap", JSON.stringify(productSaveInLocal));
+              localStorage.setItem(
+                "KanapCart",
+                JSON.stringify(productSaveInLocal)
+              );
 
               //  Si produit avec même ID/color modification de la quantité
             } else {
               productFound.quantity += orderOption.quantity;
-              localStorage.setItem("Kanap", JSON.stringify(productSaveInLocal));
+              localStorage.setItem(
+                "KanapCart",
+                JSON.stringify(productSaveInLocal)
+              );
               alert(
                 "Vous avez ajoutez " +
                   orderOption.quantity +
