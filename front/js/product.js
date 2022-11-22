@@ -1,4 +1,4 @@
-// Recuperer l'identifiant du produit
+// Récupération de l'ID du produit dans l'URL
 let params = new URL(document.location).searchParams;
 let productId = params.get("_id");
 console.log(productId);
