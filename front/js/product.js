@@ -90,12 +90,6 @@ function productItem(product) {
               "KanapCart",
               JSON.stringify(productSaveInLocal)
             );
-            alert(
-              orderOption.quantity +
-                " " +
-                orderOption.name +
-                " ajouter au panier !"
-            );
           } else {
             const productFound = productSaveInLocal.find(
               (elem) =>
@@ -116,13 +110,6 @@ function productItem(product) {
                 "KanapCart",
                 JSON.stringify(productSaveInLocal)
               );
-              alert(
-                "Vous avez ajouter " +
-                  orderOption.quantity +
-                  " " +
-                  orderOption.name +
-                  " au panier !"
-              );
             }
           }
         }
@@ -131,10 +118,14 @@ function productItem(product) {
         let orderOption = {
           id: `${product._id}`,
           name: `${product.name}`,
+          image: `${product.imageUrl}`,
+          imageDesc: `${product.altTxt}`,
           color: document.getElementById("colors").value,
           quantity: parseInt(document.getElementById("quantity").value),
+          price: `${product.price}`,
         };
         saveLocalStorage(orderOption);
+        window.location = "./cart.html";
       }
       // Sinon rien à faire, afficher une alerte avec le probleme (Déjà faite dans les deux fonction valid)
     });
