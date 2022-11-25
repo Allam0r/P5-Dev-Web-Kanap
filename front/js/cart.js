@@ -76,15 +76,25 @@ function cartList(cart) {
   });
 }
 
-function DisplayTotalQuantity() {
+function displayTotalQuantity() {
   const totalQuantity = document.querySelector("#totalQuantity");
   const total = cart.reduce((total, item) => total + item.quantity, 0);
   totalQuantity.textContent = total;
 }
 
+function displayTotalValue() {
+  const totalValue = document.querySelector("#totalPrice");
+  const valueTotal = cart.reduce(
+    (valueTotal, item) => valueTotal + item.price * item.quantity,
+    0
+  );
+  totalValue.textContent = valueTotal;
+}
+
 if (cart != null) {
   cartList(cart);
-  DisplayTotalQuantity();
+  displayTotalQuantity();
+  displayTotalValue();
 } else {
   console.log("Le panier est vide");
 }
