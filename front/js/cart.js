@@ -76,8 +76,15 @@ function cartList(cart) {
   });
 }
 
+function DisplayTotalQuantity() {
+  const totalQuantity = document.querySelector("#totalQuantity");
+  const total = cart.reduce((total, item) => total + item.quantity, 0);
+  totalQuantity.textContent = total;
+}
+
 if (cart != null) {
   cartList(cart);
+  DisplayTotalQuantity();
 } else {
   console.log("Le panier est vide");
 }
