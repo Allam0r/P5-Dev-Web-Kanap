@@ -1,9 +1,9 @@
 const cart = JSON.parse(localStorage.getItem("KanapCart"));
-const cartTitle = document.querySelector("h1");
+const cartTitleDisplay = document.querySelector("h1");
 
 function cartList(cart) {
   if (cart == null) {
-    cartTitle.innerHTML = `Votre panier est vide.`;
+    cartTitleDisplay.innerHTML = `Votre panier est vide.`;
   } else {
     cart.forEach((article) => {
       console.log(article);
