@@ -75,26 +75,48 @@ function cartList(cart) {
     document.getElementById("cart__items").appendChild(articleLink);
   });
 }
+cartList(cart);
+
+// ***************************************************************
+
+function changeQty() {
+  let qtyChange = document.getElementsByClassName("itemQuantity");
+
+  for (let elt = 0; elt < qtyChange.length; elt++) {
+    qtyChange[elt].addEventListener("change", function (event) {
+      event.stopPropagation();
+      event.preventDefault();
+
+      console.log(qtyChange[elt].value);
+
+      let currentQty = cart[elt].quantity;
+      let newQty = qtyChange[elt].valueAsNumber;
+
+      const qtyValueFind = cart.find((el) => el.newQty !== currentQty);
+
+      qtyValueFind.quantity = newQty;
+      cart[elt].quantity = qtyValueFind.quantity;
+
+      localStorage.setItem("KanapCart", JSON.stringify(cart));
+
+      location.reload();
+    });
+  }
+}
+changeQty();
+
+// ***************************************************************
 
 function displayTotalQuantity() {
-  const totalQuantity = document.querySelector("#totalQuantity");
-  const total = cart.reduce((total, item) => total + item.quantity, 0);
-  totalQuantity.textContent = total;
-}
+  let elemQty = document.getElementsByClassName("itemQuantity");
+  let itemQtyLength = elemQty.length,
+    totalQty = 0;
 
-function displayTotalValue() {
-  const totalValue = document.querySelector("#totalPrice");
-  const valueTotal = cart.reduce(
-    (valueTotal, item) => valueTotal + item.price * item.quantity,
-    0
-  );
-  totalValue.textContent = valueTotal;
-}
+  for (let i = 0; i < itemQtyLength; ++i) {
+    totalQty += elemQty[i].valueAsNumber;
+  }
 
-if (cart != null) {
-  cartList(cart);
-  displayTotalQuantity();
-  displayTotalValue();
-} else {
-  console.log("Le panier est vide");
+  let totalProductQty = document.getElementById("totalQuantity");
+  totalProductQty.innerHTML = totalQty;
 }
+displayTotalQuantity();
