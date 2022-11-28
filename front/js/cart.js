@@ -1,79 +1,105 @@
 const cart = JSON.parse(localStorage.getItem("KanapCart"));
+const cartTitle = document.querySelector("h1");
 
 function cartList(cart) {
-  cart.forEach((article) => {
-    console.log(article);
+  if (cart == null) {
+    cartTitle.innerHTML = `Votre panier est vide.`;
+  } else {
+    cart.forEach((article) => {
+      console.log(article);
 
-    let articleLink = document.createElement("a");
-    articleLink.classList.add("cart__item");
-    articleLink.dataset.id = article.id;
-    articleLink.dataset.color = article.color;
+      let articleLink = document.createElement("a");
+      articleLink.classList.add("cart__item");
+      articleLink.dataset.id = article.id;
+      articleLink.dataset.color = article.color;
 
-    let articleDivImg = document.createElement("div");
-    articleDivImg.classList.add("cart__item__img");
-    articleLink.appendChild(articleDivImg);
+      let articleDivImg = document.createElement("div");
+      articleDivImg.classList.add("cart__item__img");
+      articleLink.appendChild(articleDivImg);
 
-    let articleImg = document.createElement("img");
-    articleImg.setAttribute("src", article.image);
-    articleImg.setAttribute("alt", article.imageDesc);
-    articleDivImg.appendChild(articleImg);
+      let articleImg = document.createElement("img");
+      articleImg.setAttribute("src", article.image);
+      articleImg.setAttribute("alt", article.imageDesc);
+      articleDivImg.appendChild(articleImg);
 
-    let articleDivContent = document.createElement("div");
-    articleDivContent.classList.add("cart__item__content");
-    articleLink.appendChild(articleDivContent);
+      let articleDivContent = document.createElement("div");
+      articleDivContent.classList.add("cart__item__content");
+      articleLink.appendChild(articleDivContent);
 
-    let articleDivContentDesc = document.createElement("div");
-    articleDivContentDesc.classList.add("cart__item__content__description");
-    articleDivContent.appendChild(articleDivContentDesc);
+      let articleDivContentDesc = document.createElement("div");
+      articleDivContentDesc.classList.add("cart__item__content__description");
+      articleDivContent.appendChild(articleDivContentDesc);
 
-    let articleName = document.createElement("h2");
-    articleName.textContent = article.name;
-    articleDivContentDesc.appendChild(articleName);
+      let articleName = document.createElement("h2");
+      articleName.textContent = article.name;
+      articleDivContentDesc.appendChild(articleName);
 
-    let articleColor = document.createElement("p");
-    articleColor.textContent = article.color;
-    articleDivContentDesc.appendChild(articleColor);
+      let articleColor = document.createElement("p");
+      articleColor.textContent = article.color;
+      articleDivContentDesc.appendChild(articleColor);
 
-    let articlePrice = document.createElement("p");
-    articlePrice.textContent = article.price + ` €`;
-    articleDivContentDesc.appendChild(articlePrice);
+      let articlePrice = document.createElement("p");
+      articlePrice.textContent = article.price + ` €`;
+      articleDivContentDesc.appendChild(articlePrice);
 
-    let articleDivSettings = document.createElement("div");
-    articleDivSettings.classList.add("cart__item__content__settings");
-    articleDivContent.appendChild(articleDivSettings);
+      let articleDivSettings = document.createElement("div");
+      articleDivSettings.classList.add("cart__item__content__settings");
+      articleDivContent.appendChild(articleDivSettings);
 
-    let articleDivSettingsQty = document.createElement("div");
-    articleDivSettingsQty.classList.add(
-      "cart__item__content__settings__quantity"
-    );
-    articleDivSettings.appendChild(articleDivSettingsQty);
+      let articleDivSettingsQty = document.createElement("div");
+      articleDivSettingsQty.classList.add(
+        "cart__item__content__settings__quantity"
+      );
+      articleDivSettings.appendChild(articleDivSettingsQty);
 
-    let articleQty = document.createElement("p");
-    articleQty.textContent = `Qté : `;
-    articleDivSettingsQty.appendChild(articleQty);
+      let articleQty = document.createElement("p");
+      articleQty.textContent = `Qté : `;
+      articleDivSettingsQty.appendChild(articleQty);
 
-    let articleInput = document.createElement("input");
-    articleInput.classList.add("itemQuantity");
-    articleInput.setAttribute("type", `number`);
-    articleInput.setAttribute("name", `itemQuantity`);
-    articleInput.setAttribute("min", `1`);
-    articleInput.setAttribute("max", `100`);
-    articleInput.setAttribute("value", article.quantity);
-    articleDivSettingsQty.appendChild(articleInput);
+      let articleInput = document.createElement("input");
+      articleInput.classList.add("itemQuantity");
+      articleInput.setAttribute("type", `number`);
+      articleInput.setAttribute("name", `itemQuantity`);
+      articleInput.setAttribute("min", `1`);
+      articleInput.setAttribute("max", `100`);
+      articleInput.setAttribute("value", article.quantity);
+      articleDivSettingsQty.appendChild(articleInput);
 
-    let articleDivSettingsDelete = document.createElement("div");
-    articleDivSettingsDelete.classList.add(
-      "cart__item__content__settings__delete"
-    );
-    articleDivSettings.appendChild(articleDivSettingsDelete);
+      let articleDivSettingsDelete = document.createElement("div");
+      articleDivSettingsDelete.classList.add(
+        "cart__item__content__settings__delete"
+      );
+      articleDivSettings.appendChild(articleDivSettingsDelete);
 
-    let articleDelete = document.createElement("p");
-    articleDelete.classList.add("deleteItem");
-    articleDelete.textContent = `Supprimer`;
-    articleDivSettingsDelete.appendChild(articleDelete);
+      let articleDelete = document.createElement("p");
+      articleDelete.classList.add("deleteItem");
+      articleDelete.textContent = `Supprimer`;
+      articleDivSettingsDelete.appendChild(articleDelete);
+      articleDelete.addEventListener("click", function (event) {
+        event.stopPropagation();
+        event.preventDefault();
 
-    document.getElementById("cart__items").appendChild(articleLink);
-  });
+        let eltDeleteId = article.id;
+        let eltDeleteColor = article.color;
+
+        cart = cart.filter(
+          (elt) => elt.id !== eltDeleteId || elt.color !== eltDeleteColor
+        );
+
+        localStorage.setItem("KanapCart", JSON.stringify(cart));
+
+        alert("Votre article a été supprimé.");
+
+        if (cart.length === 0) {
+          localStorage.clear();
+        }
+
+        location.reload();
+      });
+
+      document.getElementById("cart__items").appendChild(articleLink);
+    });
+  }
 }
 cartList(cart);
 
@@ -128,5 +154,3 @@ function displayTotalQuantityAndPrice() {
 }
 
 displayTotalQuantityAndPrice();
-
-// ***************************************************************
