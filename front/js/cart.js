@@ -107,7 +107,7 @@ changeQty();
 
 // ***************************************************************
 
-function displayTotalQuantity() {
+function displayTotalQuantityAndPrice() {
   let elemQty = document.getElementsByClassName("itemQuantity");
   let itemQtyLength = elemQty.length,
     totalQty = 0;
@@ -118,5 +118,15 @@ function displayTotalQuantity() {
 
   let totalProductQty = document.getElementById("totalQuantity");
   totalProductQty.innerHTML = totalQty;
+
+  totalPrice = 0;
+  for (let i = 0; i < itemQtyLength; ++i) {
+    totalPrice += elemQty[i].valueAsNumber * cart[i].price;
+  }
+  let kanapTotalPrice = document.getElementById("totalPrice");
+  kanapTotalPrice.innerHTML = totalPrice;
 }
-displayTotalQuantity();
+
+displayTotalQuantityAndPrice();
+
+// ***************************************************************
