@@ -88,7 +88,7 @@ function cartList(cart) {
 
         localStorage.setItem("KanapCart", JSON.stringify(cart));
 
-        alert("Votre article a été supprimé.");
+        alert("Votre article a été supprimé du panier.");
 
         if (cart.length === 0) {
           localStorage.clear();

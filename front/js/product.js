@@ -75,56 +75,22 @@ function productItem(product) {
 
       let isValidColor = validColor(document.getElementById("colors").value);
 
-      // Si les deux champs sont valid
+      // Si les deux champs sont valide
       if (isValidColor && isValidQty) {
-        // Ajout sur le localStorage
-        function saveLocalStorage(orderOption) {
-          let productSaveInLocal = JSON.parse(
-            localStorage.getItem("KanapCart")
-          );
-
-          if (productSaveInLocal === null) {
-            productSaveInLocal = [];
-            productSaveInLocal.push(orderOption);
-            localStorage.setItem(
-              "KanapCart",
-              JSON.stringify(productSaveInLocal)
-            );
-          } else {
-            const productFound = productSaveInLocal.find(
-              (elem) =>
-                elem.id == orderOption.id && elem.color == orderOption.color
-            );
-
-            if (productFound == undefined) {
-              productSaveInLocal.push(orderOption);
-              localStorage.setItem(
-                "KanapCart",
-                JSON.stringify(productSaveInLocal)
-              );
-
-              //  Si produit avec même ID/color modification de la quantité
-            } else {
-              productFound.quantity += orderOption.quantity;
-              localStorage.setItem(
-                "KanapCart",
-                JSON.stringify(productSaveInLocal)
-              );
-            }
-          }
-        }
-
         //  Données enregistrées dans le localStorage
         let orderOption = {
           id: `${product._id}`,
-          name: `${product.name}`,
-          image: `${product.imageUrl}`,
-          imageDesc: `${product.altTxt}`,
           color: document.getElementById("colors").value,
           quantity: parseInt(document.getElementById("quantity").value),
-          price: `${product.price}`,
         };
-        saveLocalStorage(orderOption);
+
+        let array = getLocalStorageArray();
+        // Mise à jour du tableau localStorage
+        AjouterProduitDansTableau(orderOption, array);
+        // Mise à jour du localStorage
+        // Sauvegarde du tableau
+        setLocalStorage(array);
+
         window.location = "./cart.html";
       }
       // Sinon rien à faire, afficher une alerte avec le probleme (Déjà faite dans les deux fonction valid)
@@ -148,5 +114,23 @@ function validColor(color) {
   } else {
     alert("Veuillez selectionner une couleur !");
     return false;
+  }
+}
+function AjouterProduitDansTableau(orderOption, tableau) {
+  // Chercher si le produit a été deja ajouté
+  const productFound = tableau.find(
+    (elem) => elem.id == orderOption.id && elem.color == orderOption.color
+  );
+
+  // Produit non disponible
+  if (productFound == undefined || productFound == null) {
+    tableau.push(orderOption);
+  }
+
+  //  Si produit est disponible avec même ID/color
+  // Si dispo on modifie de la quantité
+  else {
+    let qteTotal = productFound.quantity + orderOption.quantity;
+    if (validQty(qteTotal)) productFound.quantity = qteTotal;
   }
 }
