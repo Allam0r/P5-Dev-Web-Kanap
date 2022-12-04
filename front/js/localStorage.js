@@ -10,3 +10,8 @@ function getLocalStorageArray() {
     return [];
   }
 }
+
+function clearLocalStorage() {
+  localStorage.clear();
+  // localStorage.removeItem("KanapCart");
+}
