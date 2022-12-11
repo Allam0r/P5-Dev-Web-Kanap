@@ -15,3 +15,7 @@ function clearLocalStorage() {
   localStorage.clear();
   // localStorage.removeItem("KanapCart");
 }
+
+function setContact(contact) {
+  localStorage.setItem("contact", JSON.stringify(contact));
+}

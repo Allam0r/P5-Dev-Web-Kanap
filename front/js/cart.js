@@ -110,6 +110,11 @@ function displayCart() {
 
   displayTotaux();
   updateQty();
+
+  document.getElementById("order").addEventListener("click", (e) => {
+    e.preventDefault();
+    processOrder();
+  });
 }
 
 // ***************************************************************
@@ -130,15 +135,18 @@ function displayTotaux() {
 
 function deleteFromCart(event, article, id, color) {
   cardItems = document.getElementById("cart__items");
-  cardItems.removeChild(article);
   index = tableLocalStorage.findIndex(
     (obj) => obj.id === id && obj.color === color
   );
   tableLocalStorage.splice(index, 1);
-  setLocalStorage(tableLocalStorage);
+  cardItems.removeChild(article);
+  alert("Un article à été supprimer du panier.");
   cart.splice(index, 1);
-
   displayTotaux();
+
+  if (cart == []) {
+    clearLocalStorage();
+  }
 }
 
 // ***************************************************************
@@ -179,3 +187,72 @@ function updateQty() {
 }
 
 // ***************************************************************
+
+function processOrder() {
+  // verfier que le panier est plein
+  let size = tableLocalStorage.length;
+  // verifier les champs saisis
+  if (
+    validFirstName() &&
+    validLastName() &&
+    validAddress() &&
+    validCity() &&
+    validEmail() &&
+    size > 0
+  ) {
+    // si tout est ok : remplir un objet contact
+    const contact = {
+      firstName: document.getElementById("firstName").value,
+      lastName: document.getElementById("lastName").value,
+      address: document.getElementById("address").value,
+      city: document.getElementById("city").value,
+      email: document.getElementById("email").value,
+    };
+
+    // envoyer les objets (panier et contact) au back
+    setContact(contact);
+    const products = setProductID();
+    // Rassemblement des infos
+    const data = {
+      contact,
+      products,
+    };
+
+    //console.log(data);
+    const options = {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    };
+
+    fetch("http://localhost:3000/api/products/order", options)
+      .then((res) => res.json())
+      .then((data) => {
+        // console.log(data.orderId);
+        const orderId = data.orderId;
+        clearLocalStorage();
+        window.location.href = `./confirmation.html?orderId=${orderId}`;
+      })
+      .catch((error) => {
+        console.log(error);
+        alert(
+          "Une erreur est survenue! Veuillez contacter l'administrateur du site !"
+        );
+      });
+  } else {
+    alert(
+      "Veuillez verifier les données saisies et les produits de votre panier!!"
+    );
+  }
+}
+
+function setProductID() {
+  let products = [];
+  tableLocalStorage.forEach((element) => {
+    products.push(element.id);
+  });
+  return products;
+}
