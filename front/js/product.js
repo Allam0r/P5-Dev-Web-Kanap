@@ -17,23 +17,31 @@ fetch("http://localhost:3000/api/products/" + productId)
     console.log(error.message);
   });
 
+// ***************************************************************
+// Fonction qui affiche les détails d'un produit sur la page
 function productItem(product) {
+  // Mise à jour du titre de la page avec le nom du produit
   document.querySelector("title").textContent = product.name;
 
+  // Création d'une image pour le produit et ajout de cette image à la page
   let articleImg = document.createElement("img");
   articleImg.src = product.imageUrl;
   articleImg.alt = product.altTxt;
   document.querySelector(".item__img").appendChild(articleImg);
 
+  // Affichage du nom du produit sur la page
   let articleName = document.getElementById("title");
   articleName.textContent = product.name;
 
+  // Affichage du prix du produit sur la page
   let articlePrice = document.getElementById("price");
   articlePrice.textContent = product.price;
 
+  // Affichage de la description du produit sur la page
   let articleDesc = document.getElementById("description");
   articleDesc.textContent = product.description;
 
+  // Ajout de chaque couleur disponible du produit à la liste déroulante des couleurs sur la page
   for (let color of product.colors) {
     let articleColor = document.createElement("option");
     articleColor.value = color;
@@ -97,6 +105,7 @@ function productItem(product) {
     });
 }
 
+// ***************************************************************
 function AjouterProduitDansTableau(orderOption, tableau) {
   // Chercher si le produit a été deja ajouté
   const productFound = tableau.find(
@@ -108,8 +117,8 @@ function AjouterProduitDansTableau(orderOption, tableau) {
     tableau.push(orderOption);
   }
 
-  //  Si produit est disponible avec même ID/color
-  // Si dispo on modifie de la quantité
+  // Si le produit est disponible avec même ID/color
+  // et si dispo on modifie de la quantité
   else {
     let qteTotal = productFound.quantity + orderOption.quantity;
     if (validQty(qteTotal)) productFound.quantity = qteTotal;

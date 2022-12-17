@@ -5,7 +5,6 @@ var cart = [];
 fetch("http://localhost:3000/api/products")
   .then((res) => res.json())
   .then((products) => {
-    // console.log("API :", products);
     getUserCart(products);
   })
 
@@ -14,25 +13,34 @@ fetch("http://localhost:3000/api/products")
     console.log(error.message);
   });
 
+// ***************************************************************
+// Fonction qui récupère les produits du panier de l'utilisateur
 function getUserCart(products) {
+  // Enregistrement de la liste de tous les produits dans une variable globale
   tableProductAPI = products;
-
+  // Boucle sur chaque élément du panier de l'utilisateur stocké dans le localStorage
   for (let userOrder of tableLocalStorage) {
+    // Filtrage de la liste de tous les produits pour trouver le produit correspondant à l'ID de l'élément du panier de l'utilisateur
     let arrayFilter = tableProductAPI.filter(
       (element) => element._id == userOrder.id
     );
+    // Création d'un objet produit en fusionnant l'objet du produit trouvé dans la liste de tous les produits et l'élément du panier de l'utilisateur
     let product = {
       ...arrayFilter[0],
       ...userOrder,
     };
+    // Ajout du produit au panier
     cart.push(product);
   }
+  // Affichage du panier
   displayCart();
 }
 
 // ***************************************************************
 
+// Fonction qui affiche le panier de l'utilisateur
 function displayCart() {
+  // Boucle sur chaque élément du panier
   cart.forEach((article) => {
     let articleLink = document.createElement("article");
     articleLink.classList.add("cart__item");
@@ -97,10 +105,12 @@ function displayCart() {
     );
     articleDivSettings.appendChild(articleDivSettingsDelete);
 
+    // Création du bouton "Supprimer" pour chaque produit du panier
     let articleDelete = document.createElement("p");
     articleDelete.classList.add("deleteItem");
     articleDelete.textContent = `Supprimer`;
     articleDivSettingsDelete.appendChild(articleDelete);
+    // Ajout d'un évènement "click" au bouton "Supprimer" pour supprimer le produit du panier
     articleDelete.addEventListener("click", (event) =>
       deleteFromCart(event, articleLink, article.id, article.color)
     );
@@ -120,13 +130,16 @@ function displayCart() {
 // ***************************************************************
 
 function displayTotaux() {
+  // Initialiser les variables pour le total des prix et des quantités à 0
   let totalPrix = 0;
   let totalQte = 0;
 
+  // Parcourir le tableau de panier et calculez les totaux de prix et de quantité
   for (element of cart) {
     totalPrix += element.price * element.quantity;
     totalQte += element.quantity;
   }
+  // Affichez les totaux de prix et de quantité dans les éléments HTML correspondants
   document.getElementById("totalPrice").textContent = totalPrix;
   document.getElementById("totalQuantity").textContent = totalQte;
 }
@@ -134,16 +147,33 @@ function displayTotaux() {
 // ***************************************************************
 
 function deleteFromCart(event, article, id, color) {
+  //  Récupérer l'élément HTML qui contient les articles du panier
   cardItems = document.getElementById("cart__items");
+
+  // Trouvez l'index de l'article à supprimer dans le tableau de stockage local
   index = tableLocalStorage.findIndex(
     (obj) => obj.id === id && obj.color === color
   );
+
+  // Supprimer l'article du tableau de stockage local
   tableLocalStorage.splice(index, 1);
+
+  // Supprimer l'article de l'élément HTML qui contient les articles du panier
   cardItems.removeChild(article);
+
+  // Afficher une alerte indiquant que l'article a été supprimé du panier
   alert("Un article à été supprimer du panier.");
+
+  // Supprimer l'article du tableau de panier
   cart.splice(index, 1);
+
+  // Mettre à jour le localStorage
+  setLocalStorage(tableLocalStorage);
+
+  // Mettre à jour les totaux du panier
   displayTotaux();
 
+  // Si le panier est vide, vider le stockage local
   if (cart == []) {
     clearLocalStorage();
   }
@@ -189,7 +219,7 @@ function updateQty() {
 // ***************************************************************
 
 function processOrder() {
-  // verfier que le panier est plein
+  // verfier que le panier n'est pas vide
   let size = tableLocalStorage.length;
   // verifier les champs saisis
   if (
@@ -212,18 +242,23 @@ function processOrder() {
     // envoyer les objets (panier et contact) au back
     setContact(contact);
     const products = setProductID();
-    // Rassemblement des infos
+    // Rassemblement des infos ( contact et products)
     const data = {
       contact,
       products,
     };
 
-    //console.log(data);
+    // Configuration des options pour l'envoi d'une requête HTTP POST
     const options = {
+      // Méthode de la requête HTTP
       method: "POST",
+      // Corps de la requête HTTP (envoi de données au serveur)
       body: JSON.stringify(data),
+      // En-têtes de la requête HTTP
       headers: {
+        // Type de contenu envoyé au serveur
         "Content-Type": "application/json",
+        // Type de contenu accepté par le client
         Accept: "application/json",
       },
     };
@@ -231,7 +266,6 @@ function processOrder() {
     fetch("http://localhost:3000/api/products/order", options)
       .then((res) => res.json())
       .then((data) => {
-        // console.log(data.orderId);
         const orderId = data.orderId;
         clearLocalStorage();
         window.location.href = `./confirmation.html?orderId=${orderId}`;
@@ -243,15 +277,19 @@ function processOrder() {
         );
       });
   } else {
-    alert(
-      "Veuillez verifier les données saisies et les produits de votre panier!!"
-    );
+    alert("Veuillez verifier les données saisies.");
   }
 }
 
+// ***************************************************************
+
+// Fonction qui récupère les IDs de tous les produits du panier de l'utilisateur
 function setProductID() {
+  // Création d'un tableau vide pour stocker les IDs des produits
   let products = [];
+  // Boucle sur chaque élément du panier de l'utilisateur stocké dans le localStorage
   tableLocalStorage.forEach((element) => {
+    // Ajout de l'ID du produit au tableau
     products.push(element.id);
   });
   return products;

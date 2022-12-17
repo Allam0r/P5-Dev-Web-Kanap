@@ -8,6 +8,7 @@ function validQty(quantity) {
   }
 }
 
+// ***************************************************************
 // Contrôler la selection d'une couleur
 function validColor(color) {
   if (color !== "") {
@@ -20,13 +21,10 @@ function validColor(color) {
 
 const regexName = /^[A-zÀ-ÿ ]{3,20}$/;
 const regexAddress = /^[A-zÀ-ÿ0-9 ]{5,50}$/;
-const regexEmail =
-  /^[a-zA-Z0-9.!#$’*+/=?^_`{}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-// /^([a-z\d\._-]+)@([a-z\d_-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/i
-// source regex mail: https://www.infomaniak.com/fr/support/faq/438/caracteres-admis-et-valides-dans-une-adresse-email
+const regexEmail = /^[A-z0-9._-]+@[A-z0-9._-]{2,}\.[A-z]{2,4}$/;
 
+// ***************************************************************
 // Contrôle du "firstName"
-
 function validFirstName() {
   const firstName = document.getElementById("firstName").value;
   if (regexName.test(firstName) == false) {
@@ -39,8 +37,8 @@ function validFirstName() {
   }
 }
 
+// ***************************************************************
 // Contrôle du "lastName"
-
 function validLastName() {
   const lastName = document.getElementById("lastName").value;
   if (regexName.test(lastName) == false) {
@@ -53,8 +51,8 @@ function validLastName() {
   }
 }
 
+// ***************************************************************
 // Contrôle de "address"
-
 function validAddress() {
   const address = document.getElementById("address").value;
   if (regexAddress.test(address) == false) {
@@ -67,8 +65,8 @@ function validAddress() {
   }
 }
 
+// ***************************************************************
 // Contrôle de "city"
-
 function validCity() {
   const city = document.getElementById("city").value;
   if (regexName.test(city) == false) {
@@ -81,8 +79,8 @@ function validCity() {
   }
 }
 
+// ***************************************************************
 // Contrôle de "email"
-
 function validEmail() {
   const email = document.getElementById("email").value;
   if (regexEmail.test(email) == false) {
